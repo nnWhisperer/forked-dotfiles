@@ -448,10 +448,8 @@ elif [ $task == "--install-miniconda" ]; then
         download https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh miniconda.sh
     fi
 
-    set -x
     bash miniconda.sh -b -p $MINICONDA_DIR
     rm miniconda.sh
-    set +x
     $MINICONDA_DIR/bin/conda init bash
 
     if [ -e /data/$USER/miniconda3-tmp ]; then
@@ -556,12 +554,10 @@ elif [ $task == "--install-meld" ]; then
     ok "Downloads .dmg for meld, install into ~/opt/meld and then writes ~/opt/bin/meld wrapper"
     if [[ $OSTYPE == darwin* ]]; then
         download https://github.com/yousseb/meld/releases/download/osx-14/meldmerge.dmg /tmp/meldmerge.dmg
-        set -x
         mounted=$(hdiutil attach /tmp/meldmerge.dmg | tail -1 | cut -f3)
         cp -r "$mounted" ~/opt/meld
         echo "~/opt/meld/Meld.app/Contents/MacOS/Meld \"\$@\"" > ~/opt/bin/meld
         hdiutil detach "$mounted"
-        set +x
     else
         echo
         printf "${RED}--install-meld currently only supported on Mac.\n"
@@ -767,7 +763,6 @@ elif [ $task == "--install-zoxide" ]; then
     install_env_and_symlink zoxide zoxide zoxide
     printf "${YELLOW}Installed to ~/opt/bin/zoxide${UNSET}\n"
 
-    set +x
     check_opt_bin_in_path
     printf "${YELLOW}Installed to ~/opt/bin/zoxide.${UNSET}\n\n"
     printf "${YELLOW}To start using, you need to add the following line to your .bash_profile or .bashrc:${UNSET}\n\n"
@@ -786,8 +781,6 @@ elif [ $task == "--install-bfg" ]; then
     printf "${YELLOW}Installed jar file to ~/opt/bin, and created wrapper script ~/opt/bin/bfg.${UNSET}\n\n"
 
 elif [ $task == "--dotfiles" ]; then
-    set -x
-
     # Unique backup directory based on the hash of the current time, all
     # lowercase
     #
